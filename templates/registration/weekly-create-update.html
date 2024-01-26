@@ -22,10 +22,8 @@
                     <div class="form-group col-md-12 mb-0">
                         {{ form.description|as_crispy_field }}
                     </div>
-                    {% comment %}
-                    'on_sunday', 'on_monday', 'on_tuesday', 'on_wednesday', 'on_thursday', 'on_friday', 'on_saturday',
-                    'event_type', 'half_year', 'start_time', 'end_time' {% endcomment %}
-                    <div class="form-group col-md-12 mb-0">
+
+                    <div class="form-group col-md-12 mb-2">
                         {{ form.on_sunday|as_crispy_field }}
                         {{ form.on_monday|as_crispy_field }}
                         {{ form.on_tuesday|as_crispy_field }}
@@ -48,11 +46,10 @@
                     <div class="form-group col-md-6 mb-0">
                         {{ form.end_time|as_crispy_field }}
                     </div>
-
                 </div>
 
                 <button class="btn btn-success">{{ button_text }}</button>
-
+                
             </form>
         </div>
     </div>

@@ -76,9 +76,23 @@
 							</div>
 						{% endif %}
 					</div>
+
+
+					<div class="wrap-input100 validate-input" data-validate="Enter Captcha">
+						{{form.captcha|add_class:"input100"}}
+						<span class="focus-input100" data-placeholder="کپچا"></span>
+
+						{% if form.captcha.errors %}
+							<div class="myerrors">
+								{{form.captcha.errors}}
+							</div>
+						{% endif %}
+					</div>
+
+
 					{% comment %} <a class="myfont" href="{% url 'password_reset' %}">فراموشی گذرواژه</a> {% endcomment %}
 					<br>
-					{% comment %} <a class="myfont" href="{% url 'register' %}">ثبت نام کنید.</a> {% endcomment %}
+					<a class="myfont" href="{% url 'users:register' %}">ثبت نام کنید.</a>
 					
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">

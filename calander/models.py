@@ -22,6 +22,9 @@ class HalfYear(models.Model):
 class RepetedEvent(models.Model):
     week_days = [(1, 'شنبه'), (2, 'یکشنبه'), (3, 'دوشنبه'), (4, 'سه شنبه'), (5, 'چهارشنبه'), (6, 'پنجشنبه'), (7, 'جمعه')]
     objects = jmodels.jManager()
+    today = jdatetime.datetime.now().date()
+    format_date = str(today.year) + '-' + str(today.month) + '-' + str(today.day)
+
 
     title = models.CharField(max_length=200, verbose_name="عنوان")
     description = models.TextField(verbose_name="توضیحات")
@@ -36,8 +39,9 @@ class RepetedEvent(models.Model):
 
     event_type = models.IntegerField(verbose_name="نوع ایونت", choices=[(1, 'معمولی'), (2, 'هفته ی فرد'), (3, 'هفته ی زوج')], default=1)
     half_year = models.ForeignKey(HalfYear, on_delete=models.CASCADE, default=None, verbose_name="نیمسال")
-    start_time = models.TimeField(verbose_name="زمان شروع")
-    end_time = models.TimeField(verbose_name="زمان پایان")
+    start_time = models.TimeField(verbose_name="زمان شروع", help_text="زمان را به فرمت ساعت:دقیقه وارد کنید. مثال: <br> 12:30", default=time.strftime("%H:%M"))
+    end_time = models.TimeField(verbose_name="زمان پایان", help_text="زمان را به فرمت ساعت:دقیقه وارد کنید. مثال: <br> 12:35", default=time.strftime("%H:%M"))
+
 
     class Meta:
         verbose_name = "رویداد تکراری"
