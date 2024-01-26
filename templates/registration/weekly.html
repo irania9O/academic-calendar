@@ -1,11 +1,31 @@
 {% extends 'registration/base.html' %}
 
 {% block title %}{% block title-meta %}
-لیست ایونت های هفتگی
+لیست ایونت های هفتگی {% if is_odd_week %}
+<span class="badge badge-info">هفته ی فرد</span>
+{% else %}
+<span class="badge badge-warning">هفته ی زوج</span>
+{% endif %}
+
 {% endblock %}{% endblock %}
 
 
 {% block main %}
+
+<div class="row">
+  <div class="col-4">
+    <a href="{{previous_week}}" class="btn btn-secondary btn-block">هفته قبل</a>
+  </div>
+  <div class="col-4">
+    <a href="" class="btn btn-secondary btn-block">{{last_day_of_week}} - {{first_day_of_week}}</a>
+  </div>
+  <div class="col-4">
+    <a href="{{next_week}}" class="btn btn-secondary btn-block">هفته بعد</a>
+  </div>
+</div>
+
+<br>
+
 <div class="row">
   {% if is_half_year_selected %}
     <div class="col-12">
@@ -87,7 +107,13 @@
                                 <a class="badge badge-info"href="{% url 'calander:update_daily' event.pk %}">ویرایش</a>
                                 <a class="badge badge-danger"href="{% url 'calander:delete_daily' event.pk %}">حذف</a>
                                 {% else %}
-                                <span class="badge badge-success">هفتگی</span>
+                                  {% if event.event_type == 1 %}
+                                    <span class="badge badge-success">هفتگی</span>
+                                  {% elif event.event_type == 2 %}
+                                    <span class="badge badge-info">هفته ی فرد</span>
+                                  {% elif event.event_type == 3 %}
+                                    <span class="badge badge-warning">هفته ی زوج</span>
+                                  {% endif %}
                                 <a class="badge badge-info"href="{% url 'calander:update_weekly' event.pk %}">ویرایش</a>
                                 <a class="badge badge-danger"href="{% url 'calander:delete_weekly' event.pk %}">حذف</a>
                               {% endif %}

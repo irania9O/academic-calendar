@@ -46,8 +46,19 @@ class WeekEventsViewList(LoginRequiredMixin, ListView):
     template_name = 'registration/weekly.html'
     
     def get_context_data(self, **kwargs):
+        offset = int(self.request.resolver_match.kwargs['offset'])
+        today = jdatetime.datetime.now().date() + jdatetime.timedelta(days=offset*7)
+        days_to_subtract = (today.weekday()) % 7
+        first_day_of_week = today - jdatetime.timedelta(days=days_to_subtract)
+        is_odd_week = first_day_of_week.isocalendar()[1] % 2 == 1
+
         ctx = super(WeekEventsViewList, self).get_context_data(**kwargs)
         ctx['is_half_year_selected'] = self.request.user.current_half_year != None
+        ctx['first_day_of_week'] = first_day_of_week
+        ctx['last_day_of_week'] = first_day_of_week + jdatetime.timedelta(days=6)
+        ctx['next_week'] = reverse_lazy('calander:list_weekly', kwargs={'offset': offset + 1})
+        ctx['previous_week'] = reverse_lazy('calander:list_weekly', kwargs={'offset': offset - 1})
+        ctx['is_odd_week'] = is_odd_week
         return ctx
 
     def get_queryset(self):
@@ -65,9 +76,9 @@ class WeekEventsViewList(LoginRequiredMixin, ListView):
         for event in RepetedEvent.objects.filter(owner=self.request.user, half_year=self.request.user.current_half_year):
             if event.event_type == 1:
                 datalist.append(event)
-            elif event.event_type == 2 and not is_odd_week:
+            elif event.event_type == 2 and is_odd_week:
                 datalist.append(event)
-            elif event.event_type == 3 and is_odd_week:
+            elif event.event_type == 3 and not is_odd_week:
                 datalist.append(event)
 
         repeat_events = OneTimeEvent.objects.filter(owner=self.request.user, on_day__range=[start_date, end_date])
@@ -121,6 +132,9 @@ class OneEventViewList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super(OneEventViewList, self).get_context_data(**kwargs)
         ctx['is_half_year_selected'] = self.request.user.current_half_year != None
+        ctx['day'] = jdatetime.datetime.now().date() + jdatetime.timedelta(days=int(self.request.resolver_match.kwargs['offset']))
+        ctx['next_day'] = reverse_lazy('calander:list_daily', kwargs={'offset': int(self.request.resolver_match.kwargs['offset']) + 1})
+        ctx['previous_day'] = reverse_lazy('calander:list_daily', kwargs={'offset': int(self.request.resolver_match.kwargs['offset']) - 1})
         return ctx
 
     def get_queryset(self):
@@ -138,7 +152,8 @@ class OneEventViewList(LoginRequiredMixin, ListView):
             event.name_of_day()
             datalist.append(event)
 
-        day = jdatetime.date.fromgregorian(date=today).weekday()
+        day = jdatetime.date.fromgregorian(date=day).weekday()
+
         if day == 0:
             repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_friday=True, half_year=self.request.user.current_half_year)
         elif day == 1:
@@ -158,9 +173,9 @@ class OneEventViewList(LoginRequiredMixin, ListView):
         for event in repeat_events:
             if event.event_type == 1:
                 datalist.append(event)
-            elif event.event_type == 2 and not is_odd_week:
+            elif event.event_type == 2 and is_odd_week:
                 datalist.append(event)
-            elif event.event_type == 3 and is_odd_week:
+            elif event.event_type == 3 and not is_odd_week:
                 datalist.append(event)
 
         return datalist

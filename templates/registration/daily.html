@@ -6,6 +6,21 @@
 
 
 {% block main %}
+
+<div class="row">
+  <div class="col-4">
+    <a href="{{previous_day}}" class="btn btn-secondary btn-block">روز قبل</a>
+  </div>
+  <div class="col-4">
+    <a href="" class="btn btn-secondary btn-block">{{day}}</a>
+  </div>
+  <div class="col-4">
+    <a href="{{next_day}}" class="btn btn-secondary btn-block">روز بعد</a>
+  </div>
+</div>
+
+<br>
+
 <div class="row">
   {% if is_half_year_selected %}
     <div class="col-12">
@@ -19,11 +34,6 @@
                     <th>عنوان</th>
                     <th>جزییات</th>
                     <th>عملیات</th>
-                    {% comment %} <th>تصویر</th> {% endcomment %}
-                    {% comment %} <th>دسته بندی</th> {% endcomment %}
-                    {% comment %} <th>نویسنده</th> {% endcomment %}
-                    {% comment %} <th>خلاصه</th> {% endcomment %}
-                    {% comment %} <th>ویژه</th> {% endcomment %}
                     <th>وضعیت</th>
                   </tr>
                 </thead>
@@ -33,34 +43,21 @@
                             <td>
                               {{event.title}}
                             </td>
-                            {% comment %} <td><img src="{{article.thumbnail.url}}" width="120" height="80" style="border-radius: 6px  ;"></td> {% endcomment %}
-                            {% comment %} <td>{{article.catagoy_to_list}}</td> {% endcomment %}
-                            {% comment %} <td>{{article.author.get_full_name}}</td> {% endcomment %}
                             <td>{{event.description|striptags|truncatewords:30}}</td>
-                            
-
                             <td>{{event.start_time}} - {{event.end_time}}</td>
-                            {% comment %} <td>{{event.end_time}}</td> {% endcomment %}
-                            {% comment %} <td>
-                              {% if article.is_special %}
-                                <i class="fa fa-check-circle" style="color: green"></i>
-                              {% else %}
-                                <i class="fa fa-minus-circle" style="color: red"></i>
-                              {% endif %}
-
-                            {% comment %} <td>
-                              {% if article.is_special %}
-                                <i class="fa fa-check-circle" style="color: green"></i>
-                              {% else %}
-                                <i class="fa fa-minus-circle" style="color: red"></i>
-                              {% endif %}
-                            </td>   {% endcomment %}
                              <td>        
                               {% if event.on_time %}
                                 <span class="badge badge-warning">یکبار</span>
                                 <a class="badge badge-info"href="{% url 'calander:update_daily' event.pk %}">ویرایش</a>
                                 <a class="badge badge-danger"href="{% url 'calander:delete_daily' event.pk %}">حذف</a>
                               {% else %}
+                                {% if event.event_type == 1 %}
+                                  <span class="badge badge-success">هفتگی</span>
+                                {% elif event.event_type == 2 %}
+                                  <span class="badge badge-info">هفته ی فرد</span>
+                                {% elif event.event_type == 3 %}
+                                  <span class="badge badge-warning">هفته ی زوج</span>
+                                {% endif %}
                                 <span class="badge badge-success">هفتگی</span>
                                 <a class="badge badge-info"href="{% url 'calander:update_weekly' event.pk %}">ویرایش</a>
                                 <a class="badge badge-danger"href="{% url 'calander:delete_weekly' event.pk %}">حذف</a>
