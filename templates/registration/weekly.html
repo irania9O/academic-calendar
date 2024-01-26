@@ -7,10 +7,12 @@
 
 {% block main %}
 <div class="row">
+  {% if is_half_year_selected %}
     <div class="col-12">
         {% if object_list %}
           <div class="card">
             <!-- /.card-header -->
+           
             <div class="card-body table-responsive p-2 text-center">
               <table class="table table-hover">
                 <thead>
@@ -25,11 +27,6 @@
                     <th>پنجشنبه</th>
                     <th>جمعه</th>
                     <th>عملیات</th>
-                    {% comment %} <th>تصویر</th> {% endcomment %}
-                    {% comment %} <th>دسته بندی</th> {% endcomment %}
-                    {% comment %} <th>نویسنده</th> {% endcomment %}
-                    {% comment %} <th>خلاصه</th> {% endcomment %}
-                    {% comment %} <th>ویژه</th> {% endcomment %}
                     <th>وضعیت</th>
                   </tr>
                 </thead>
@@ -39,9 +36,6 @@
                             <td>
                               {{event.title}}
                             </td>
-                            {% comment %} <td><img src="{{article.thumbnail.url}}" width="120" height="80" style="border-radius: 6px  ;"></td> {% endcomment %}
-                            {% comment %} <td>{{article.catagoy_to_list}}</td> {% endcomment %}
-                            {% comment %} <td>{{article.author.get_full_name}}</td> {% endcomment %}
                             <td>{{event.description|striptags|truncatewords:30}}</td>
 
                             <td >
@@ -85,25 +79,8 @@
                                 <i class="fa fa-check-circle" style="color: green"></i>
                               {% endif %}
                             </td>
-                            
-
 
                             <td>{{event.start_time}} - {{event.end_time}}</td>
-                            {% comment %} <td>{{event.end_time}}</td> {% endcomment %}
-                            {% comment %} <td>
-                              {% if article.is_special %}
-                                <i class="fa fa-check-circle" style="color: green"></i>
-                              {% else %}
-                                <i class="fa fa-minus-circle" style="color: red"></i>
-                              {% endif %}
-
-                            {% comment %} <td>
-                              {% if article.is_special %}
-                                <i class="fa fa-check-circle" style="color: green"></i>
-                              {% else %}
-                                <i class="fa fa-minus-circle" style="color: red"></i>
-                              {% endif %}
-                            </td>   {% endcomment %}
                              <td>        
                               {% if event.on_time %}
                                 <span class="badge badge-warning">یکبار</span>
@@ -120,6 +97,7 @@
                 </tbody>
               </table>
             </div>
+            
             <!-- /.card-body -->
           </div>
         {% else %}
@@ -127,5 +105,19 @@
         {% endif %}
       <!-- /.card -->
     </div>
+    {% else %}
+    <div class="col-md-8 text-center mx-auto">
+      <!-- general form elements -->
+      <div class="card card-danger">
+          <div class="card-header">
+                  <h3 class="card-title mb-0 float-left">هشدار!</h3>
+              </div>
+                  <div class="card-body py-4">
+                          <p class="py-2">شما هنوز سال تحصیلی پیش فرض را انتخاب نکرده اید.</p>
+                  </div>
+          </div>
+      </div>
+        
+    {% endif %}
   </div>
 {% endblock %}

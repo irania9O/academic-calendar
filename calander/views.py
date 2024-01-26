@@ -11,9 +11,6 @@ from django.views.generic import (
     DeleteView
     )
 
-weekdaysـfa = ['جمعه', 'شنبه', 'یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه']
-weekdays_en = ['friday', 'saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday']
-# Create your views here.
 
 class WeekEventsViewCreate(LoginRequiredMixin, WeeklyFieldsMixin, CreateView):
     model = RepetedEvent
@@ -47,7 +44,11 @@ class WeekEventsViewUpdate(LoginRequiredMixin, WeeklyFieldsMixin, UpdateView):
 class WeekEventsViewList(LoginRequiredMixin, ListView):
     model = RepetedEvent
     template_name = 'registration/weekly.html'
-    # context_object_name = 'events'
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(WeekEventsViewList, self).get_context_data(**kwargs)
+        ctx['is_half_year_selected'] = self.request.user.current_half_year != None
+        return ctx
 
     def get_queryset(self):
         offset = int(self.request.resolver_match.kwargs['offset'])
@@ -59,7 +60,7 @@ class WeekEventsViewList(LoginRequiredMixin, ListView):
         end_date = start_date + jdatetime.timedelta(days=6)
         print(start_date, end_date)
         datalist = []
-        for event in RepetedEvent.objects.filter(owner=self.request.user):
+        for event in RepetedEvent.objects.filter(owner=self.request.user, half_year=self.request.user.current_half_year):
             datalist.append(event)
 
         repeat_events = OneTimeEvent.objects.filter(owner=self.request.user, on_day__range=[start_date, end_date])
@@ -109,7 +110,11 @@ class OneEventUpdate(LoginRequiredMixin, DailyFieldsMixin, UpdateView):
 class OneEventViewList(LoginRequiredMixin, ListView):
     model = RepetedEvent
     template_name = 'registration/daily.html'
-    # context_object_name = 'events'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(OneEventViewList, self).get_context_data(**kwargs)
+        ctx['is_half_year_selected'] = self.request.user.current_half_year != None
+        return ctx
 
     def get_queryset(self):
         offset = int(self.request.resolver_match.kwargs['offset'])
@@ -124,19 +129,19 @@ class OneEventViewList(LoginRequiredMixin, ListView):
 
         day = jdatetime.date.fromgregorian(date=today).weekday()
         if day == 0:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_friday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_friday=True, half_year=self.request.user.current_half_year)
         elif day == 1:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_saturday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_saturday=True, half_year=self.request.user.current_half_year)
         elif day == 2:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_sunday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_sunday=True, half_year=self.request.user.current_half_year)
         elif day == 3:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_monday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_monday=True, half_year=self.request.user.current_half_year)
         elif day == 4:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_tuesday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_tuesday=True, half_year=self.request.user.current_half_year)
         elif day == 5:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_wednesday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_wednesday=True, half_year=self.request.user.current_half_year)
         elif day == 6:
-            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_thursday=True)
+            repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_thursday=True, half_year=self.request.user.current_half_year)
         
         for event in repeat_events:
             datalist.append(event)
