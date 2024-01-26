@@ -56,12 +56,19 @@ class WeekEventsViewList(LoginRequiredMixin, ListView):
         days_to_subtract = (today.weekday()) % 7
         first_day_of_week = today - jdatetime.timedelta(days=days_to_subtract)
 
+        is_odd_week = first_day_of_week.isocalendar()[1] % 2 == 1
+
         start_date = first_day_of_week
         end_date = start_date + jdatetime.timedelta(days=6)
-        print(start_date, end_date)
+        
         datalist = []
         for event in RepetedEvent.objects.filter(owner=self.request.user, half_year=self.request.user.current_half_year):
-            datalist.append(event)
+            if event.event_type == 1:
+                datalist.append(event)
+            elif event.event_type == 2 and not is_odd_week:
+                datalist.append(event)
+            elif event.event_type == 3 and is_odd_week:
+                datalist.append(event)
 
         repeat_events = OneTimeEvent.objects.filter(owner=self.request.user, on_day__range=[start_date, end_date])
         for event in repeat_events:
@@ -120,6 +127,10 @@ class OneEventViewList(LoginRequiredMixin, ListView):
         offset = int(self.request.resolver_match.kwargs['offset'])
         today = jdatetime.datetime.now().date()
         day = today + jdatetime.timedelta(days=offset)
+        days_to_subtract = (today.weekday()) % 7
+        first_day_of_week = today - jdatetime.timedelta(days=days_to_subtract)
+
+        is_odd_week = first_day_of_week.isocalendar()[1] % 2 == 1
         datalist = []
 
         onetime_events = OneTimeEvent.objects.filter(owner=self.request.user, on_day=day)
@@ -142,9 +153,15 @@ class OneEventViewList(LoginRequiredMixin, ListView):
             repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_wednesday=True, half_year=self.request.user.current_half_year)
         elif day == 6:
             repeat_events = RepetedEvent.objects.filter(owner=self.request.user, on_thursday=True, half_year=self.request.user.current_half_year)
-        
+
+
         for event in repeat_events:
-            datalist.append(event)
+            if event.event_type == 1:
+                datalist.append(event)
+            elif event.event_type == 2 and not is_odd_week:
+                datalist.append(event)
+            elif event.event_type == 3 and is_odd_week:
+                datalist.append(event)
 
         return datalist
 
