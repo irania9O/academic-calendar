@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}{% block title-meta %}
-افزودن مقالات
+افزودن ایونت های هفتگی
 {% endblock %}{% endblock %}
 
 {% block main %}
@@ -10,7 +10,7 @@
     <!-- general form elements -->
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title mb-0 float-left">افزودن مقاله</h3>
+            <h3 class="card-title mb-0 float-left">افزودن ایونت</h3>
         </div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
@@ -24,13 +24,13 @@
                     </div>
 
                     <div class="form-group col-md-12 mb-2">
+                        {{ form.on_saturday|as_crispy_field }}
                         {{ form.on_sunday|as_crispy_field }}
                         {{ form.on_monday|as_crispy_field }}
                         {{ form.on_tuesday|as_crispy_field }}
                         {{ form.on_wednesday|as_crispy_field }}
                         {{ form.on_thursday|as_crispy_field }}
                         {{ form.on_friday|as_crispy_field }}
-                        {{ form.on_saturday|as_crispy_field }}
                     </div>
 
                     <div class="form-group col-md-6 mb-0">
