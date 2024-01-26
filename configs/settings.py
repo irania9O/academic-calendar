@@ -150,3 +150,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # LOGIN_REDIRECT_URL = "account:home"
 LOGIN_URL = "users:login"
 LOGOUT_REDIRECT_URL = 'users:login'
+
+
+# expire session after 10 minutes
+SESSION_COOKIE_AGE = 10 * 60
+SESSION_SAVE_EVERY_REQUEST = True
