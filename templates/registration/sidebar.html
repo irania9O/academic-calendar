@@ -33,7 +33,7 @@
             {% if user.is_superuser or user.is_author %}  
               <li class="nav-item has-treeview menu-open">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <i class="nav-icon fas fa-calendar"></i>
                   <p>
                     ایونت ها
                     <i class="right fas fa-angle-left"></i>
@@ -42,25 +42,25 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href=" {% url 'calander:list_weekly' 0 %}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="nav-icon fas fa-list"></i>
                       <p>لیست ایونت های هفتگی</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href=" {% url 'calander:list_daily' 0 %}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="nav-icon fas fa-list"></i>
                       <p>لیست ایونت های روزانه</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href=" {% url 'calander:create_weekly' %}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="nav-icon fas fa-plus"></i>
                       <p>افزودن ایونت تکراری</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href=" {% url 'calander:create_daily' %}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
+                      <i class="nav-icon fas fa-plus"></i>
                       <p>افزودن تک ایونت</p>
                     </a>
                   </li>
@@ -68,7 +68,14 @@
               </li>
             {% endif %}
           <li class="nav-item">
-            {% comment %} {% link request 'profile' 'پروفایل' 'fa-th' %} {% endcomment %}
+            <a href="{% url 'users:profile' %}" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                پروفایل
+              </p>
+            </a>
+          </li>
+            {% comment %} {% link request 'users:profile' 'پروفایل' 'fa-th' %} {% endcomment %}
           </li>
         </ul>
       </nav>

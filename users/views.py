@@ -1,7 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, ProfileForm
+from .models import User
 # Create your views here.
 
 
@@ -26,3 +28,13 @@ class Register(CreateView):
         return 'registration/register.html'
         
  
+
+class Profile(LoginRequiredMixin, UpdateView):
+	model = User
+	success_url = reverse_lazy('users:profile')
+	template_name = 'registration/profile.html'
+	form_class = ProfileForm
+
+	def get_object(self):
+		return User.objects.get(pk= self.request.user.pk)
+     
