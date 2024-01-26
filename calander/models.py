@@ -1,6 +1,7 @@
 from django.db import models
 from django_jalali.db import models as jmodels
 import jdatetime
+import time
 # print 
 
 class HalfYear(models.Model):
@@ -34,7 +35,7 @@ class RepetedEvent(models.Model):
     on_saturday = models.BooleanField(verbose_name="جمعه", default=False)
 
     event_type = models.IntegerField(verbose_name="نوع ایونت", choices=[(1, 'معمولی'), (2, 'هفته ی فرد'), (3, 'هفته ی زوج')], default=1)
-    half_year = models.ForeignKey(HalfYear, on_delete=models.CASCADE, null=True, blank=True, default=None, verbose_name="نیمسال")
+    half_year = models.ForeignKey(HalfYear, on_delete=models.CASCADE, default=None, verbose_name="نیمسال")
     start_time = models.TimeField(verbose_name="زمان شروع")
     end_time = models.TimeField(verbose_name="زمان پایان")
 
@@ -48,12 +49,15 @@ class RepetedEvent(models.Model):
 
 class OneTimeEvent(models.Model):
     objects = jmodels.jManager()
+    today = jdatetime.datetime.now().date()
+    format_date = str(today.year) + '-' + str(today.month) + '-' + str(today.day)
+
 
     title = models.CharField(max_length=200, verbose_name="عنوان")
     description = models.TextField(verbose_name="توضیحات")
-    on_day = jmodels.jDateField(null=True, blank=True, default=None, verbose_name="روز")
-    start_time = models.TimeField(verbose_name="زمان شروع")
-    end_time = models.TimeField(verbose_name="زمان پایان")
+    on_day = jmodels.jDateField(verbose_name="روز", help_text="تاریخ را به فرمت سال-ماه-روز وارد کنید. مثال: <br>" + format_date, default=format_date)
+    start_time = models.TimeField(verbose_name="زمان شروع", help_text="زمان را به فرمت ساعت:دقیقه وارد کنید. مثال: <br> 12:30", default=time.strftime("%H:%M"))
+    end_time = models.TimeField(verbose_name="زمان پایان", help_text="زمان را به فرمت ساعت:دقیقه وارد کنید. مثال: <br> 12:35", default=time.strftime("%H:%M"))
 
     class Meta:
         verbose_name = "رویداد یک بار"

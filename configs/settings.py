@@ -40,7 +40,13 @@ INSTALLED_APPS = [
     'django_jalali',
     'users.apps.UsersConfig',
     'calander.apps.CalanderConfig',
+]
 
+INSTALLED_APPS += [
+    'widget_tweaks',
+    'crispy_bootstrap4',
+    'crispy_forms',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +64,7 @@ ROOT_URLCONF = 'configs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,3 +134,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'users.User'
+
+STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = '/media/'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# LOGIN_REDIRECT_URL = "account:home"
+LOGIN_URL = "users:login"
+LOGOUT_REDIRECT_URL = 'users:login'
