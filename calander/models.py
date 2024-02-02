@@ -20,7 +20,6 @@ class HalfYear(models.Model):
         return 'نیم سال ' + str(self.choices[self.half - 1][1]) + " " + str(self.year) 
 
 class RepetedEvent(models.Model):
-    week_days = [(1, 'شنبه'), (2, 'یکشنبه'), (3, 'دوشنبه'), (4, 'سه شنبه'), (5, 'چهارشنبه'), (6, 'پنجشنبه'), (7, 'جمعه')]
     objects = jmodels.jManager()
     today = jdatetime.datetime.now().date()
     format_date = str(today.year) + '-' + str(today.month) + '-' + str(today.day)
