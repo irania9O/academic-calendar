@@ -54,9 +54,6 @@ docs/_build/
 .venv/
 .idea/
 
-# migrations
-migrations/
-
 # database
 db.sqlite3
 
